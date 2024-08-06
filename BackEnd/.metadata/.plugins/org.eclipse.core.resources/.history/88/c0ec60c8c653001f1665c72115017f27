@@ -1,0 +1,34 @@
+package pnu.edu;
+
+import java.util.Date;
+
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import pnu.edu.domain.FreeBoard;
+import pnu.edu.domain.Member;
+import pnu.edu.domain.Role;
+import pnu.edu.repository.FreeBoardRepository;
+import pnu.edu.repository.MemberRepository;
+
+@Component
+@RequiredArgsConstructor
+public class Testdatainit implements ApplicationRunner{
+
+	private final FreeBoardRepository freeBRepo;
+	private final MemberRepository memRepo;
+	
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+
+		memRepo.save(Member.builder().username("member").password("abcd").role(Role.ROLE_MEMBER).enabled(true).build());
+		memRepo.save(Member.builder().username("admin").password("abcd").role(Role.ROLE_MEMBER).enabled(true).build());
+		
+		String s[] = { "member", "admin" };
+		for (int i = 1 ; i <= 10 ; i++) {
+		freeBRepo.save(FreeBoard.builder().privateType("public").type("수다").title("title"+i).content("content"+i).username(s[(i%2)]).view(0).createDate(new Date()).build());
+		}
+	}
+}

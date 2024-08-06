@@ -1,0 +1,5 @@
+package pnu.edu.repository;
+
+public interface FreeCommentRepository {
+
+}

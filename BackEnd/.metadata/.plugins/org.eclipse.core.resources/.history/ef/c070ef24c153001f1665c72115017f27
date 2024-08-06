@@ -1,0 +1,7 @@
+package pnu.edu.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ShareBoardRepository extends JpaRepository<T, ID> {
+
+}
