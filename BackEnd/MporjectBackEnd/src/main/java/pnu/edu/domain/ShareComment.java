@@ -29,13 +29,18 @@ public class ShareComment {
 
 	@Id@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int shareCommentId;
-	private int shareBoardId;
+	@Column(length = 50, nullable = false)
 	private String content;
-	@ManyToOne
-	@JoinColumn(name = "username", referencedColumnName = "username")
-	Member member;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Builder.Default
 	@Column(columnDefinition = "timestamp default current_timestamp")
 	private Date createDate = new Date();
+
+	@ManyToOne
+	@JoinColumn(name = "shareBoardId")
+	ShareBoard shareBoard;
+
+	@ManyToOne
+	@JoinColumn(name = "username")
+	Member member;
 }

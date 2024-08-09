@@ -1,0 +1,66 @@
+package pnu.edu.service;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.RequiredArgsConstructor;
+import pnu.edu.domain.FreeBoard;
+import pnu.edu.repository.FreeBoardRepository;
+
+@Service
+@RequiredArgsConstructor
+public class FreeBoardService {
+	
+	private final FreeBoardRepository freebRepo;
+	@Value("${spring.servlet.multipart.location}")
+	private String location;
+	
+	public Page<FreeBoard> getFreeBoard(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		
+		return freebRepo.findAll(pageable);
+	}
+	
+	public FreeBoard getFreeBoard(int freeboardid) {
+		countView(freeboardid);
+		return freebRepo.findById(freeboardid).get();
+	}
+	
+	public FreeBoard countView(int freeboardid) {
+		FreeBoard findf = freebRepo.findById(freeboardid).get();
+		findf.setView(findf.getView()+1);
+		return freebRepo.save(findf);
+	}
+	
+	public FreeBoard insertFreeBoard(FreeBoard freeBoard, MultipartFile[] files) {
+		if(files
+		freeBoard = FreeBoard.builder()
+				.privateType(freeBoard.getPrivateType())
+				.type(freeBoard.getType())
+				.title(freeBoard.getTitle())
+				.content(freeBoard.getContent())
+				.member(freeBoard.getMember()).build();
+		return freebRepo.save(freeBoard);
+	}
+	
+	public FreeBoard updateFreeBoard(FreeBoard freeBoard) {
+		FreeBoard findf = freebRepo.findById(freeBoard.getFreeBoardId()).get();
+		findf.setPrivateType(freeBoard.getPrivateType());
+		findf.setType(freeBoard.getType());
+		findf.setTitle(freeBoard.getTitle());
+		findf.setContent(freeBoard.getContent());
+//		findf.setImg(freeBoard.getImg());
+		findf.setCreateDate(freeBoard.getCreateDate());
+		return freebRepo.save(findf);
+	}
+	
+	public FreeBoard deleteFreeBoard(int freeboardid) {
+		FreeBoard findf = freebRepo.findById(freeboardid).get();
+		freebRepo.delete(findf);
+		return findf;
+	}
+}

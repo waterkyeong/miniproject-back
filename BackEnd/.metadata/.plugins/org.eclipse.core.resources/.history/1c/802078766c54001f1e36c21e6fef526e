@@ -1,0 +1,15 @@
+package pnu.edu.service;
+
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import pnu.edu.repository.FreeBoardRepository;
+
+@Service
+@RequiredArgsConstructor
+public class FreeBoardService {
+
+	private final FreeBoardRepository freebRepo;
+	
+	
+}

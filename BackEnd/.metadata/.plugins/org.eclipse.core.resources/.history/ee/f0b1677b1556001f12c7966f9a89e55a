@@ -1,0 +1,41 @@
+package pnu.edu.service;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.RequiredArgsConstructor;
+import pnu.edu.domain.FreeBoardImgs;
+import pnu.edu.repository.FreeBoardImgsRepository;
+
+@Service
+@RequiredArgsConstructor
+public class FreeBoardImgsService {
+
+	private final FreeBoardImgsRepository fbiRepo;
+
+	public String generateOriName(String fimgoriname) {
+		//요청한 시간을 yyyyMMddHHmmss형식으로 포맷
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		String timestamp = dateFormat.format(new Date());
+		// 확장자를 포함한 원래 파일 이름과 결합
+		int lastDotIndex = fimgoriname.lastIndexOf('.');
+		String fimgnameWithoutExtension = lastDotIndex != -1 ? fimgoriname.substring(0, lastDotIndex) : fimgoriname;
+		String fimgExtension = lastDotIndex != -1 ? fimgoriname.substring(lastDotIndex) : "" ;
+		
+		return fimgnameWithoutExtension + "_" + timestamp + fimgExtension;
+	}
+	
+	public FreeBoardImgs uploadfImg(MultipartFile[] files, String uploadDir) {
+//		builder 쓰면 되지 않을까??
+		return null;
+	}
+	
+	public ResponseEntity<ResponsModel<FreeBoardImgs>> upload(MultipartFile fifile) {
+		
+	}
+	
+}

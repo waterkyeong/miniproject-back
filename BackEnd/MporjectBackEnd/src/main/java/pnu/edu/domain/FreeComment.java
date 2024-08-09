@@ -29,13 +29,18 @@ public class FreeComment {
 
 	@Id@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int freeCommentId;
-	private int freeBoardId;
+	@Column(length = 50, nullable = false)
 	private String content;
-	@ManyToOne
-	@JoinColumn(name = "username", referencedColumnName = "username")
-	Member member;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Builder.Default
 	@Column(columnDefinition = "timestamp default current_timestamp")
 	private Date createDate = new Date();
+
+	@ManyToOne
+	@JoinColumn(name = "freeBoardId")
+	FreeBoard freeBoard;
+
+	@ManyToOne
+	@JoinColumn(name = "username")
+	Member member;
 }

@@ -1,0 +1,36 @@
+package pnu.edu.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter @Setter @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "member")
+public class Member {
+
+	@Id @Column(columnDefinition = "varchar(10)")
+	private String username;
+	@Column(nullable = false, columnDefinition = "varchar(15)")
+	private String password;
+	@Column(nullable = false, columnDefinition = "varchar(10)")
+	private String alias;
+	@Column(nullable = false, columnDefinition = "varchar(20)")
+	private String email;
+	@Enumerated(EnumType.STRING)@Column(nullable = false, columnDefinition = "varchar(15)")
+	private Role role;
+	@Column(nullable = false, columnDefinition = "BIT(1)")
+	private boolean enabled;
+}
