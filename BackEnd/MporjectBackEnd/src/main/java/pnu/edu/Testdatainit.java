@@ -29,7 +29,7 @@ public class Testdatainit implements ApplicationRunner{
 		
 		Member[] members = {member1, member2};
 		for (int i = 1 ; i <= 10 ; i++) {
-			freeBRepo.save(FreeBoard.builder().privateType("public").type("수다").title("title"+i).content("content"+i).member(members[i%2]).view(0).createDate(new Date()).build());
+			freeBRepo.save(FreeBoard.builder().privateType("public").type("기타").title("title"+i).content("content"+i).member(members[i%2]).view(0).createDate(new Date()).build());
 		}
 	}
 }

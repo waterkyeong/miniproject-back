@@ -25,11 +25,11 @@ public class FreeBoardImgs {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int fimgid;
-	@Column(length = 20, nullable = false)
+	@Column(length = 100, nullable = false)
 	private String fimgname;
 	@Column(length = 100, nullable = false)
 	private String fimgoriname;
 	
-	@ManyToOne(optional = true)	@JoinColumn(name = "free_board_id") 
+	@ManyToOne(optional = true)	@JoinColumn(name = "free_board_id")
 	private FreeBoard freeboard;
 }

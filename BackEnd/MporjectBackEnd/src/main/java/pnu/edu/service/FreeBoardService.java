@@ -1,9 +1,9 @@
 package pnu.edu.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import pnu.edu.domain.FreeBoard;
 import pnu.edu.domain.FreeBoardImgs;
+import pnu.edu.domain.dto.FreeBoardDTO;
+import pnu.edu.domain.dto.FreeBoardIdDTO;
 import pnu.edu.repository.FreeBoardImgsRepository;
 import pnu.edu.repository.FreeBoardRepository;
 import pnu.edu.util.Fileutil;
@@ -24,18 +26,47 @@ public class FreeBoardService {
 	private final FreeBoardRepository freebRepo;
 	private final FreeBoardImgsRepository freebImgRepo;
 	
-	@Value("${spring.servlet.multipart.location}")
-	private static String location;
-	
-	public Page<FreeBoard> getFreeBoard(int page, int size) {
+	public List<FreeBoardDTO> getFreeBoard(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		
-		return freebRepo.findAll(pageable);
+		Page<FreeBoard> list = freebRepo.findAll(pageable);
+		
+		List<FreeBoardDTO> ret = new ArrayList<>(); 
+		for (FreeBoard fb : list) {
+		
+			FreeBoardDTO t = new FreeBoardDTO();
+			t.setFreeBoardId(fb.getFreeBoardId());
+			t.setPrivateType(fb.getPrivateType());
+			t.setType(fb.getType());
+			t.setTitle(fb.getTitle());
+			t.setView(fb.getView());
+			t.setCreateDate(fb.getCreateDate());
+			t.setUsername(fb.getMember().getUsername());
+			ret.add(t);
+		}
+		return ret;
 	}
 	
-	public FreeBoard getFreeBoard(int freeboardid) {
+	public FreeBoardIdDTO getFreeBoard(int freeboardid) {
 		countView(freeboardid);
-		return freebRepo.findById(freeboardid).get();
+		
+		FreeBoard findfb = freebRepo.findById(freeboardid).get();
+		
+		FreeBoardIdDTO s = new FreeBoardIdDTO();
+		
+		s.setFreeBoardId(findfb.getFreeBoardId());
+		s.setPrivateType(findfb.getPrivateType());
+		s.setType(findfb.getType());
+		s.setTitle(findfb.getTitle());
+		s.setContent(findfb.getContent());
+		s.setView(findfb.getView());
+		s.setCreateDate(findfb.getCreateDate());
+		for(FreeBoardImgs st : findfb.getFimges()) {
+			s.getFimges().add(st.getFimgid());
+		}
+		s.setUsrename(findfb.getMember().getUsername());
+		
+		return s;
 	}
 	
 	public FreeBoard countView(int freeboardid) {
@@ -45,28 +76,40 @@ public class FreeBoardService {
 	}
 	
 	public FreeBoard insertFreeBoard(FreeBoard freeBoard, MultipartFile[] files) throws IllegalStateException, IOException {
-		//파일저장
-		Fileutil.uploadImg(files);
 		
-		//게시판 DB저장
-		FreeBoard freeBoard1 = FreeBoard.builder()
-				.privateType(freeBoard.getPrivateType())
-				.type(freeBoard.getType())
-				.title(freeBoard.getTitle())
-				.content(freeBoard.getContent())
-				.member(freeBoard.getMember()).build();
-		FreeBoard freeBoard2 = freebRepo.save(freeBoard1);
-
-		//이미지 정보저장(객체만들어서)
-		for(MultipartFile file : files) {			
-			FreeBoardImgs img = FreeBoardImgs.builder()
-					.fimgoriname(location + file.getOriginalFilename())
-					.fimgname(file.getName())
-					.freeboard(freeBoard2)
-					.build();
-			freebImgRepo.save(img);
+		if(freeBoard != null && files != null) {
+			//파일저장
+			String [] newFilename = Fileutil.uploadImg(files);
+			
+			//게시판 DB저장
+			FreeBoard freeBoard1 = FreeBoard.builder()
+					.privateType(freeBoard.getPrivateType())
+					.type(freeBoard.getType())
+					.title(freeBoard.getTitle())
+					.content(freeBoard.getContent())
+					.member(freeBoard.getMember()).build();
+			FreeBoard freeBoard2 = freebRepo.save(freeBoard1);
+			
+			//이미지 정보저장(객체만들어서)
+			for(int i = 0 ; i < files.length ; i++) {			
+				FreeBoardImgs img = FreeBoardImgs.builder()
+						.fimgoriname(files[i].getOriginalFilename())
+						.fimgname(newFilename[i])
+						.freeboard(freeBoard2)
+						.build();
+				freebImgRepo.save(img);
+			}
+			return freeBoard2;
 		}
-		
+			//게시판 DB저장
+			FreeBoard freeBoard1 = FreeBoard.builder()
+					.privateType(freeBoard.getPrivateType())
+					.type(freeBoard.getType())
+					.title(freeBoard.getTitle())
+					.content(freeBoard.getContent())
+					.member(freeBoard.getMember()).build();
+			FreeBoard freeBoard2 = freebRepo.save(freeBoard1);
+			
 		return freeBoard2;
 	}
 
@@ -92,7 +135,7 @@ public class FreeBoardService {
 		//이미지 정보저장(객체만들어서)
 		for(MultipartFile file : files) {
 			FreeBoardImgs img = FreeBoardImgs.builder()
-					.fimgoriname(location + file.getOriginalFilename())
+					.fimgoriname(file.getOriginalFilename())
 					.fimgname(file.getName())
 					.freeboard(findf1)
 					.build();

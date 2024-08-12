@@ -1,5 +1,6 @@
 package pnu.edu.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -50,9 +51,10 @@ public class FreeBoard {
 	@Column(columnDefinition = "timestamp default current_timestamp")
 	private Date createDate = new Date();
 	
+	@Builder.Default
 	@OneToMany(mappedBy = "freeboard", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@OrderBy("id asc")
-	private List<FreeBoardImgs> fimges;
+	private List<FreeBoardImgs> fimges = new ArrayList<>();
 	
 	@ManyToOne
 	@JoinColumn(name = "username")
