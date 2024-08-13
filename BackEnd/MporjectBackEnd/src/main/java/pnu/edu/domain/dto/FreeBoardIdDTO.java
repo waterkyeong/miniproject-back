@@ -19,6 +19,6 @@ public class FreeBoardIdDTO {
 	private String content;
 	private int view;
 	private Date createDate;
-	private List<Integer> fimges = new ArrayList<>();
+	private List<String> fimges = new ArrayList<>();
 	private String usrename;
 }

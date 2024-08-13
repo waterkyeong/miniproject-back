@@ -44,14 +44,14 @@ public class FreeBoardController {
 	
 	@PostMapping("/api/freeboard")
 	public ResponseEntity<?> insertFreeBoard(@RequestPart(value="freeboarddata") FreeBoard freeBoard,
-			@RequestPart(value = "files") MultipartFile[] files) throws IllegalStateException, IOException {
+			@RequestPart(value = "files", required = false) MultipartFile[] files) throws IllegalStateException, IOException {
 		log.info("insert freeBoard");
 		return ResponseEntity.ok(freeService.insertFreeBoard(freeBoard, files));
 	}
 	
 	@PutMapping("/api/freeboard")
 	public ResponseEntity<?> updateFreeBoard(@RequestPart(value="freeboarddata") FreeBoard freeBoard,
-			@RequestPart(value = "files") MultipartFile[] files) throws IllegalStateException, IOException {
+			@RequestPart(value = "files", required = false) MultipartFile[] files) throws IllegalStateException, IOException {
 		log.info("update freeBoard");
 		return ResponseEntity.ok(freeService.updateFreeBoard(freeBoard, files));
 	}
