@@ -27,7 +27,7 @@ public class ShareBoardImgs {
 	private int simgid;
 	@Column(length = 100, nullable = false)
 	private String simgname;
-	@Column(length = 15, nullable = false)
+	@Column(length = 100, nullable = false)
 	private String simgoriname;
 	
 	@ManyToOne(optional = true)	@JoinColumn(name = "share_board_id") 

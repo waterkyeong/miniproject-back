@@ -1,5 +1,6 @@
 package pnu.edu.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,14 +50,11 @@ public class ShareBoard {
 	@Builder.Default
 	@Column(columnDefinition = "timestamp default current_timestamp")
 	private Date createDate = new Date();
-//	@Builder.Default
-//	@LastModifiedDate
-//	private Date modifyDate = new Date();
 	
-
+	@Builder.Default
 	@OneToMany(mappedBy = "shareboard", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@OrderBy("id asc")
-	private List<ShareBoardImgs> simges;
+	private List<ShareBoardImgs> simges = new ArrayList<>();
 	
 	@ManyToOne
 	@JoinColumn(name = "username")

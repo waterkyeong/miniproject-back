@@ -52,21 +52,21 @@ public class FreeBoardService {
 
 		FreeBoard findfb = freebRepo.findById(freeboardid).get();
 
-		FreeBoardIdDTO s = new FreeBoardIdDTO();
+		FreeBoardIdDTO fbi = new FreeBoardIdDTO();
 
-		s.setFreeBoardId(findfb.getFreeBoardId());
-		s.setPrivateType(findfb.getPrivateType());
-		s.setType(findfb.getType());
-		s.setTitle(findfb.getTitle());
-		s.setContent(findfb.getContent());
-		s.setView(findfb.getView());
-		s.setCreateDate(findfb.getCreateDate());
-		for(FreeBoardImgs st : findfb.getFimges()) {
-			s.getFimges().add(st.getFimgname());
+		fbi.setFreeBoardId(findfb.getFreeBoardId());
+		fbi.setPrivateType(findfb.getPrivateType());
+		fbi.setType(findfb.getType());
+		fbi.setTitle(findfb.getTitle());
+		fbi.setContent(findfb.getContent());
+		fbi.setView(findfb.getView());
+		fbi.setCreateDate(findfb.getCreateDate());
+		for(FreeBoardImgs fit : findfb.getFimges()) {
+			fbi.getFimges().add(fit.getFimgname());
 		}
-		s.setUsrename(findfb.getMember().getUsername());
+		fbi.setUsrename(findfb.getMember().getUsername());
 
-		return s;
+		return fbi;
 	}
 
 	public FreeBoard countView(int freeboardid) {
@@ -93,12 +93,12 @@ public class FreeBoardService {
 
 			//이미지 정보저장(객체만들어서)
 			for(int i = 0 ; i < files.length ; i++) {			
-				FreeBoardImgs img = FreeBoardImgs.builder()
+				FreeBoardImgs fimg = FreeBoardImgs.builder()
 						.fimgoriname(files[i].getOriginalFilename())
 						.fimgname(newFilename[i])
 						.freeboard(freeBoard2)
 						.build();
-				freebImgRepo.save(img);
+				freebImgRepo.save(fimg);
 			}
 		}
 		return freeBoard2;
@@ -118,8 +118,7 @@ public class FreeBoardService {
 		if(files != null && files.length > 0) {
 			if( findf.getFimges() != null) {
 				// 기존 저장된 파일 삭제
-				List<FreeBoardImgs> list= findf.getFimges();
-				for(FreeBoardImgs i : list) {
+				for(FreeBoardImgs i : findf.getFimges()) {
 					freebImgRepo.deleteById(i.getFimgid());
 				}
 			}

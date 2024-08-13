@@ -1,0 +1,73 @@
+package pnu.edu.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import pnu.edu.domain.ShareBoard;
+import pnu.edu.domain.ShareBoardImgs;
+import pnu.edu.domain.dto.ShareBoardDTO;
+import pnu.edu.domain.dto.ShareBoardIdDTO;
+import pnu.edu.repository.ShareBoardImgsRepository;
+import pnu.edu.repository.ShareBoardRepository;
+
+@Service
+@RequiredArgsConstructor
+public class ShareBoardService {
+
+	private final ShareBoardRepository shareRepo;
+	private final ShareBoardImgsRepository shardImgRepo;
+	
+	public List<ShareBoardDTO> getShareBoard(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		
+		Page<ShareBoard> list = shareRepo.findAll(pageable);
+		
+		List<ShareBoardDTO> ret = new ArrayList<>();
+		for(ShareBoard sb : list) {
+			
+			ShareBoardDTO sdto = new ShareBoardDTO();
+			sdto.setShareBoardId(sb.getShareBoardId());
+			sdto.setType(sb.getType());
+			sdto.setTitle(sb.getTitle());
+			sdto.setContent(sb.getContent());
+			sdto.setUsername(sb.getMember().getUsername());
+			sdto.setView(sb.getView());
+			sdto.setCreateDate(sb.getCreateDate());
+			ret.add(sdto);
+		}
+		return ret;
+	}
+	
+	public ShareBoardIdDTO getShareBoard(int shareboardid) {
+		countView(shareboardid);
+		
+		ShareBoard finds = shareRepo.findById(shareboardid).get();
+		
+		ShareBoardIdDTO sbi = new ShareBoardIdDTO();
+		
+		sbi.setShareBoardId(finds.getShareBoardId());
+		sbi.setType(finds.getType());
+		sbi.setTitle(finds.getTitle());
+		sbi.setContent(finds.getContent());
+		sbi.setAdress(finds.getAdress());
+		sbi.setUsername(finds.getMember().getUsername());
+		sbi.setView(finds.getView());
+		for(ShareBoardImgs sit : sbi.getSimges()) {
+			sbi.getSimges().add(sit.getSimgname());
+		}
+		
+		sbi.setCreateDate(finds.getCreateDate());
+	}
+	
+	public ShareBoard countView(int shareboardid) {
+		ShareBoard finds = shareRepo.findById(shareboardid).get();
+		finds.setView(finds.getView()+1);
+		return shareRepo.save(finds);
+	}
+}

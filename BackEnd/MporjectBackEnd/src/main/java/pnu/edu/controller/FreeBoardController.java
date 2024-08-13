@@ -31,7 +31,7 @@ public class FreeBoardController {
 	private final FreeBoardService freeService;
 	
 	@GetMapping("/public/freeboard")
-	public ResponseEntity<?> getFreeBoard(@RequestParam(required = false, defaultValue ="1") Integer page,  @RequestParam(required = false, defaultValue ="10") Integer size) {
+	public ResponseEntity<?> getFreeBoard(@RequestParam(required = false, defaultValue ="1") Integer page,  @RequestParam(required = false, defaultValue ="15") Integer size) {
 		log.info("get freeBoard: All");
 		return ResponseEntity.ok(freeService.getFreeBoard(page, size));
 	}

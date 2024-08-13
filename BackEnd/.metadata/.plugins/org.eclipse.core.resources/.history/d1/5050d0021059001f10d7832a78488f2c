@@ -1,0 +1,18 @@
+package pnu.edu.service;
+
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import pnu.edu.domain.ShareBoard;
+import pnu.edu.repository.ShareBoardImgsRepository;
+import pnu.edu.repository.ShareBoardRepository;
+
+@Service
+@RequiredArgsConstructor
+public class ShareBoardService {
+
+	private final ShareBoardRepository sharedRepo;
+	private final ShareBoardImgsRepository shardImgRepo;
+	
+	public 
+}

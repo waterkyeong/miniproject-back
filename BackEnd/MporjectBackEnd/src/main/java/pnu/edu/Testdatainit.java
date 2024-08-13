@@ -10,14 +10,18 @@ import org.springframework.stereotype.Component;
 import pnu.edu.domain.FreeBoard;
 import pnu.edu.domain.Member;
 import pnu.edu.domain.Role;
+import pnu.edu.domain.ShareBoard;
 import pnu.edu.repository.FreeBoardRepository;
 import pnu.edu.repository.MemberRepository;
+import pnu.edu.repository.ShareBoardRepository;
 
 //@Component
 public class Testdatainit implements ApplicationRunner{
 
+//	@Autowired
+//	private FreeBoardRepository freeBRepo;
 	@Autowired
-	private FreeBoardRepository freeBRepo;
+	private ShareBoardRepository shareBRepo;
 	@Autowired
 	private MemberRepository memRepo;
 	
@@ -29,7 +33,8 @@ public class Testdatainit implements ApplicationRunner{
 		
 		Member[] members = {member1, member2};
 		for (int i = 1 ; i <= 10 ; i++) {
-			freeBRepo.save(FreeBoard.builder().privateType("public").type("기타").title("title"+i).content("content"+i).member(members[i%2]).view(0).createDate(new Date()).build());
+//			freeBRepo.save(FreeBoard.builder().privateType("public").type("기타").title("title"+i).content("content"+i).member(members[i%2]).view(0).createDate(new Date()).build());
+			shareBRepo.save(ShareBoard.builder().type("나눔").title("title"+i).content("content"+i).adress("부산대학교 학생회관").member(members[i%2]).view(0).createDate(new Date()).build());
 		}
 	}
 }
