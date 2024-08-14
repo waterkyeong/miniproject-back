@@ -3,6 +3,7 @@ package pnu.edu.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import jakarta.annotation.Nonnull;
@@ -15,6 +16,13 @@ public class CustomConfig implements WebMvcConfigurer {
 		registry.addMapping("/**") // 모든 주소에 대해서
 		.allowedMethods(CorsConfiguration.ALL) // 모든 Method에 대해서
 		.allowedOrigins(CorsConfiguration.ALL); // 모든 Origin에 대해서
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/photos/**")
+//		.addResourceLocations("file:src/main/resources/static/photos/");
+		.addResourceLocations("classpath:/static/photos/");	//java & resource 둘다에서 찾아서 설정해준다.
 	}
 	
 //	@Override

@@ -41,4 +41,21 @@ public class Fileutil {
 		
 		return newFileName;
 	}
+
+//	public static Map<String, Object> getResourceByImgId(int imgid) { // 하나만 받는메소드 이 메소드는 파일을 다운받을때 사용하면 된다.
+//		
+//		Resource resource = null;
+//		Map<String, Object> map = new HashMap<>();
+//		//셋중에 하나만 넘어가야함.
+//		// 성공인경우
+//		map.put("image", resource);
+//		map.put("message", "ok");
+//		// db에 없을경우
+//		map.put("message", "Not Found Record");
+//		// db에 있지만,파일이 없는경우
+//		map.put("message", "Not Found File");
+//		
+//		return null;
+//	}
+	
 }

@@ -56,6 +56,10 @@ public class FreeBoard {
 	@OrderBy("id asc")
 	private List<FreeBoardImgs> fimges = new ArrayList<>();
 	
+	@Builder.Default
+	@OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<FreeComment> fcomes = new ArrayList<>();
+	
 	@ManyToOne
 	@JoinColumn(name = "username")
 	Member member;

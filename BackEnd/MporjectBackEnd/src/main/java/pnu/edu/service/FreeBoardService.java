@@ -4,19 +4,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import pnu.edu.domain.FreeBoard;
 import pnu.edu.domain.FreeBoardImgs;
+import pnu.edu.domain.FreeComment;
 import pnu.edu.domain.dto.FreeBoardDTO;
-import pnu.edu.domain.dto.FreeBoardIdDTO;
+import pnu.edu.domain.dto.FreeCommentDTO;
 import pnu.edu.repository.FreeBoardImgsRepository;
 import pnu.edu.repository.FreeBoardRepository;
+import pnu.edu.repository.FreeCommentRepository;
 import pnu.edu.util.Fileutil;
 
 @Service
@@ -25,15 +24,33 @@ public class FreeBoardService {
 
 	private final FreeBoardRepository freebRepo;
 	private final FreeBoardImgsRepository freebImgRepo;
+	private final FreeCommentRepository freeComRepo;
 
-	public List<FreeBoardDTO> getFreeBoard(int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
-
-		Page<FreeBoard> list = freebRepo.findAll(pageable);
-
-		List<FreeBoardDTO> ret = new ArrayList<>(); 
-		for (FreeBoard fb : list) {
-
+//	public List<FreeBoardDTO> getFreeBoard(int page, int size) {
+//		Pageable pageable = PageRequest.of(page, size);
+//
+//		Page<FreeBoard> list = freebRepo.findAll(pageable);
+//
+//		List<FreeBoardDTO> ret = new ArrayList<>(); 
+//		for (FreeBoard fb : list) {
+//
+//			FreeBoardDTO t = new FreeBoardDTO();
+//			t.setFreeBoardId(fb.getFreeBoardId());
+//			t.setPrivateType(fb.getPrivateType());
+//			t.setType(fb.getType());
+//			t.setTitle(fb.getTitle());
+//			t.setView(fb.getView());
+//			t.setCreateDate(fb.getCreateDate());
+//			t.setUsername(fb.getMember().getUsername());
+//			ret.add(t);
+//		}
+//		return ret;
+//	}
+	
+	public List<FreeBoardDTO> getFreeBoard() {
+		List<FreeBoard> flist = freebRepo.findAll();
+		List<FreeBoardDTO> list = new ArrayList<>();
+		for(FreeBoard fb : flist) {
 			FreeBoardDTO t = new FreeBoardDTO();
 			t.setFreeBoardId(fb.getFreeBoardId());
 			t.setPrivateType(fb.getPrivateType());
@@ -42,17 +59,18 @@ public class FreeBoardService {
 			t.setView(fb.getView());
 			t.setCreateDate(fb.getCreateDate());
 			t.setUsername(fb.getMember().getUsername());
-			ret.add(t);
+			list.add(t);
 		}
-		return ret;
+		return list; 
 	}
+	
 
-	public FreeBoardIdDTO getFreeBoard(int freeboardid) {
+	public FreeBoardDTO getFreeBoard(int freeboardid) {
 		countView(freeboardid);
 
 		FreeBoard findfb = freebRepo.findById(freeboardid).get();
 
-		FreeBoardIdDTO fbi = new FreeBoardIdDTO();
+		FreeBoardDTO fbi = new FreeBoardDTO();
 
 		fbi.setFreeBoardId(findfb.getFreeBoardId());
 		fbi.setPrivateType(findfb.getPrivateType());
@@ -61,11 +79,18 @@ public class FreeBoardService {
 		fbi.setContent(findfb.getContent());
 		fbi.setView(findfb.getView());
 		fbi.setCreateDate(findfb.getCreateDate());
-		for(FreeBoardImgs fit : findfb.getFimges()) {
-			fbi.getFimges().add(fit.getFimgname());
-		}
-		fbi.setUsrename(findfb.getMember().getUsername());
-
+		if (findfb.getFimges() != null) {
+	        for (FreeBoardImgs fit : findfb.getFimges()) {
+	            if (fit.getFimgname() != null) {
+	                fbi.getFimges().add(fit.getFimgname());
+	            }
+	        }
+	    }
+		fbi.setUsername(findfb.getMember().getUsername());
+		
+		List<FreeComment> rootCom = freeComRepo.findByFreeBoard_FreeBoardIdAndParentIsNull(freeboardid);
+		fbi.setFcomts(loadFreeComts(rootCom));
+		
 		return fbi;
 	}
 
@@ -73,6 +98,23 @@ public class FreeBoardService {
 		FreeBoard findf = freebRepo.findById(freeboardid).get();
 		findf.setView(findf.getView()+1);
 		return freebRepo.save(findf);
+	}
+	
+	public List<FreeCommentDTO> loadFreeComts(List<FreeComment> freecomts) {
+		List<FreeCommentDTO> fcDTO = new ArrayList<>();
+		for(FreeComment fc : freecomts) {
+			FreeCommentDTO fcd = new FreeCommentDTO();
+			fcd.setFreeCommentId(fc.getFreeCommentId());
+			fcd.setContent(fc.getContent());
+			fcd.setCreateDate(fc.getCreateDate());
+			fcd.setParentId(fc.getParent()!= null ? fc.getParent().getFreeCommentId() : null);
+			fcd.setFreeBoardId(fc.getFreeBoard().getFreeBoardId()); 
+			fcd.setUsername(fc.getMember() != null ? fc.getMember().getUsername() : "Unknown");
+			List<FreeCommentDTO> childDTOs = loadFreeComts(fc.getFcchildlist());
+	        fcd.setFcchildlist(childDTOs);
+			fcDTO.add(fcd);
+		}
+		return fcDTO;
 	}
 
 	public FreeBoard insertFreeBoard(FreeBoard freeBoard, MultipartFile[] files) throws IllegalStateException, IOException {

@@ -3,9 +3,6 @@ package pnu.edu.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import pnu.edu.domain.ShareBoard;
 import pnu.edu.domain.ShareBoardImgs;
 import pnu.edu.domain.dto.ShareBoardDTO;
-import pnu.edu.domain.dto.ShareBoardIdDTO;
 import pnu.edu.repository.ShareBoardImgsRepository;
 import pnu.edu.repository.ShareBoardRepository;
 import pnu.edu.util.Fileutil;
@@ -25,15 +21,32 @@ public class ShareBoardService {
 	private final ShareBoardRepository shareRepo;
 	private final ShareBoardImgsRepository shardImgRepo;
 	
-	public List<ShareBoardDTO> getShareBoard(int page, int size) {
-		
-		Pageable pageable = PageRequest.of(page, size);
-		
-		Page<ShareBoard> list = shareRepo.findAll(pageable);
-		
-		List<ShareBoardDTO> ret = new ArrayList<>();
-		for(ShareBoard sb : list) {
-			
+//	public List<ShareBoardDTO> getShareBoard(int page, int size) {
+//		
+//		Pageable pageable = PageRequest.of(page, size);
+//		
+//		Page<ShareBoard> list = shareRepo.findAll(pageable);
+//		
+//		List<ShareBoardDTO> ret = new ArrayList<>();
+//		for(ShareBoard sb : list) {
+//			
+//			ShareBoardDTO sdto = new ShareBoardDTO();
+//			sdto.setShareBoardId(sb.getShareBoardId());
+//			sdto.setType(sb.getType());
+//			sdto.setTitle(sb.getTitle());
+//			sdto.setContent(sb.getContent());
+//			sdto.setUsername(sb.getMember().getUsername());
+//			sdto.setView(sb.getView());
+//			sdto.setCreateDate(sb.getCreateDate());
+//			ret.add(sdto);
+//		}
+//		return ret;
+//	}
+	
+	public List<ShareBoardDTO> getShareBoard() {
+		List<ShareBoard> slist = shareRepo.findAll();
+		List<ShareBoardDTO> list = new ArrayList<>();
+		for(ShareBoard sb : slist) {
 			ShareBoardDTO sdto = new ShareBoardDTO();
 			sdto.setShareBoardId(sb.getShareBoardId());
 			sdto.setType(sb.getType());
@@ -42,18 +55,18 @@ public class ShareBoardService {
 			sdto.setUsername(sb.getMember().getUsername());
 			sdto.setView(sb.getView());
 			sdto.setCreateDate(sb.getCreateDate());
-			ret.add(sdto);
+			list.add(sdto);
 		}
-		return ret;
+		return list;
 	}
 	
-	public ShareBoardIdDTO getShareBoard(int shareboardid) {
+	public ShareBoardDTO getShareBoard(int shareboardid) {
 		
 		countView(shareboardid);
 		
 		ShareBoard finds = shareRepo.findById(shareboardid).get();
 		
-		ShareBoardIdDTO sbi = new ShareBoardIdDTO();
+		ShareBoardDTO sbi = new ShareBoardDTO();
 		
 		sbi.setShareBoardId(finds.getShareBoardId());
 		sbi.setType(finds.getType());

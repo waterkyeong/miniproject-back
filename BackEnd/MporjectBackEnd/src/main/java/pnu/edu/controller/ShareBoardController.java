@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,10 +29,13 @@ public class ShareBoardController {
 	private final ShareBoardService shareService;
 	
 	@GetMapping("/public/shareboard")
-	public ResponseEntity<?> getShareBoard(@RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "15") Integer size) {
-		log.info("get shareBoard : All");
-		return ResponseEntity.ok(shareService.getShareBoard(page, size));
+	public ResponseEntity<?> getShareBoard(){
+		return ResponseEntity.ok(shareService.getShareBoard());
 	}
+//	public ResponseEntity<?> getShareBoard(@RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "15") Integer size) {
+//		log.info("get shareBoard : All");
+//		return ResponseEntity.ok(shareService.getShareBoard(page, size));
+//	}
 	
 	@GetMapping("/public/shareboard/{shareboardid}")
 	public ResponseEntity<?> getShareBoard(@PathVariable int shareboardid) {

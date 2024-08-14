@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,10 +30,13 @@ public class FreeBoardController {
 	private final FreeBoardService freeService;
 	
 	@GetMapping("/public/freeboard")
-	public ResponseEntity<?> getFreeBoard(@RequestParam(required = false, defaultValue ="1") Integer page,  @RequestParam(required = false, defaultValue ="15") Integer size) {
-		log.info("get freeBoard: All");
-		return ResponseEntity.ok(freeService.getFreeBoard(page, size));
+	public ResponseEntity<?> getFreeBoard(){
+		return ResponseEntity.ok(freeService.getFreeBoard());
 	}
+//	public ResponseEntity<?> getFreeBoard(@RequestParam(required = false, defaultValue ="1") Integer page,  @RequestParam(required = false, defaultValue ="15") Integer size) {
+//		log.info("get freeBoard: All");
+//		return ResponseEntity.ok(freeService.getFreeBoard(page, size));
+//	}
 	
 	@GetMapping("/public/freeboard/{freeboardid}")
 	public ResponseEntity<?> getFreeBoard(@PathVariable int freeboardid) {
