@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import pnu.edu.service.FreeBoardService;
 		maxFileSize = 1000000,
 		maxRequestSize = 10000000
 		)
+@RequestMapping("/api")
 public class FreeBoardController {
 
 	private final FreeBoardService freeService;
@@ -44,21 +46,21 @@ public class FreeBoardController {
 		return ResponseEntity.ok(freeService.getFreeBoard(freeboardid));
 	}
 	
-	@PostMapping("/api/freeboard")
+	@PostMapping("/users/freeboard")
 	public ResponseEntity<?> insertFreeBoard(@RequestPart(value="freeboarddata") FreeBoard freeBoard,
 			@RequestPart(value = "files", required = false) MultipartFile[] files) throws IllegalStateException, IOException {
 		log.info("insert freeBoard");
 		return ResponseEntity.ok(freeService.insertFreeBoard(freeBoard, files));
 	}
 	
-	@PutMapping("/api/freeboard")
+	@PutMapping("/users/freeboard")
 	public ResponseEntity<?> updateFreeBoard(@RequestPart(value="freeboarddata") FreeBoard freeBoard,
 			@RequestPart(value = "files", required = false) MultipartFile[] files) throws IllegalStateException, IOException {
 		log.info("update freeBoard");
 		return ResponseEntity.ok(freeService.updateFreeBoard(freeBoard, files));
 	}
 	
-	@DeleteMapping("/api/freeboard/{freeboardid}")
+	@DeleteMapping("/users/freeboard/{freeboardid}")
 	public ResponseEntity<?> deleteFreeBoard(@PathVariable int freeboardid) {
 		log.info("delete freeboard");
 		return ResponseEntity.ok(freeService.deleteFreeBoard(freeboardid));

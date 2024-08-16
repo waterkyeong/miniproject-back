@@ -22,7 +22,7 @@ public class Member {
 	@Id
 	@Column(length=16)
 	private String username;
-	@Column(length=15, nullable = false)
+	@Column(length=100, nullable = false)
 	private String password;
 	@Column(length=10, nullable = false)
 	private String alias;
