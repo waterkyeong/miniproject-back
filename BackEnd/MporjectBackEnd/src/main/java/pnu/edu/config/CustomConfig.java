@@ -21,8 +21,8 @@ public class CustomConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/photos/**")
-//		.addResourceLocations("file:src/main/resources/static/photos/");
-		.addResourceLocations("classpath:/static/photos/");	//java & resource 둘다에서 찾아서 설정해준다.
+		.addResourceLocations("file:src/main/resources/static/photos/");
+//		.addResourceLocations("classpath:/static/photos/");	//java & resource 둘다에서 찾아서 설정해준다.
 	}
 	
 //	@Override

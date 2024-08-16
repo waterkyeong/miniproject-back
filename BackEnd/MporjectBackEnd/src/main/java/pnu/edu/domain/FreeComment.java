@@ -41,6 +41,9 @@ public class FreeComment {
 	@Builder.Default
 	@Column(columnDefinition = "timestamp default current_timestamp")
 	private Date createDate = new Date();
+	@Builder.Default
+	@Column(nullable = false)
+	private Boolean deleted = false;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parentId")

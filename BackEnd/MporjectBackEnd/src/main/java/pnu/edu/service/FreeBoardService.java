@@ -81,8 +81,8 @@ public class FreeBoardService {
 		fbi.setCreateDate(findfb.getCreateDate());
 		if (findfb.getFimges() != null) {
 	        for (FreeBoardImgs fit : findfb.getFimges()) {
-	            if (fit.getFimgname() != null) {
-	                fbi.getFimges().add(fit.getFimgname());
+	            if (fit.getFimgoriname() != null) {
+	                fbi.getFimges().add(fit.getFimgoriname());
 	            }
 	        }
 	    }
@@ -109,9 +109,10 @@ public class FreeBoardService {
 			fcd.setCreateDate(fc.getCreateDate());
 			fcd.setParentId(fc.getParent()!= null ? fc.getParent().getFreeCommentId() : null);
 			fcd.setFreeBoardId(fc.getFreeBoard().getFreeBoardId()); 
-			fcd.setUsername(fc.getMember() != null ? fc.getMember().getUsername() : "Unknown");
+			fcd.setUsername(fc.getMember() != null ? fc.getMember().getUsername() : "없는 회원입니다.");
 			List<FreeCommentDTO> childDTOs = loadFreeComts(fc.getFcchildlist());
 	        fcd.setFcchildlist(childDTOs);
+	        fcd.setDeleted(fc.getDeleted());
 			fcDTO.add(fcd);
 		}
 		return fcDTO;

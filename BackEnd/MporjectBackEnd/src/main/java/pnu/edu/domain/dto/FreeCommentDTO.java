@@ -17,4 +17,5 @@ public class FreeCommentDTO {
 	private List<FreeCommentDTO> fcchildlist = new ArrayList<>();
 	private int freeBoardId;
 	private String username;
+	private boolean deleted;
 }
