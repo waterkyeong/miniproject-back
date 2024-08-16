@@ -10,6 +10,7 @@ import lombok.ToString;
 
 @Getter @Setter @ToString 
 public class FreeCommentDTO {
+	
 	private int freeCommentId;
 	private String content;
 	private Date createDate;

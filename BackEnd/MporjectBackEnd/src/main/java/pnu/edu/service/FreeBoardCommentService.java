@@ -32,7 +32,7 @@ public class FreeBoardCommentService {
 //		Member finduser = memRepo.findById(username).get();
 		
 		freeCommentDTO.setFreeBoardId(findfb.getFreeBoardId());
-//		freeCommentDTO.setMember(finduser.getUsername);
+//		freeCommentDTO.setMember(finduser.getUsername());
 		
 		FreeComment newfc = FreeComment.builder()
 				.content(freeCommentDTO.getContent())
@@ -43,10 +43,10 @@ public class FreeBoardCommentService {
 		
 		if(freeCommentDTO.getParentId() != null && freeCommentDTO.getParentId()>0) {
 			 logger.info("Inserting comment: {}", freeCommentDTO);
-			FreeComment pc = fcRepo.findById(freeCommentDTO.getParentId()).orElseThrow(()-> new RuntimeException("Not Found ParentComment"));
-			newfc.setParent(pc);
-			pc.getFcchildlist().add(newfc);
-			fcRepo.save(pc);
+			FreeComment fpc = fcRepo.findById(freeCommentDTO.getParentId()).orElseThrow(()-> new RuntimeException("Not Found ParentComment"));
+			newfc.setParent(fpc);
+			fpc.getFcchildlist().add(newfc);
+			fcRepo.save(fpc);
 		}else {
 			newfc.setParent(null);
 		}

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ import pnu.edu.service.ShareBoardService;
 		maxFileSize = 1000000,
 		maxRequestSize = 10000000
 		)
+@RequestMapping("/api")
 public class ShareBoardController {
 
 	private final ShareBoardService shareService;
@@ -43,21 +45,21 @@ public class ShareBoardController {
 		return ResponseEntity.ok(shareService.getShareBoard(shareboardid));
 	}
 	
-	@PostMapping("/api/shareboard")
+	@PostMapping("/users/shareboard")
 	public ResponseEntity<?> insertShareBoard(@RequestPart(value="shareboarddata") ShareBoard shareBoard,
 			@RequestPart(value = "files", required = false) MultipartFile[] files) {
 		log.info("insert shareBoard");
 		return ResponseEntity.ok(shareService.insertShareBoard(shareBoard, files));
 	}
 	
-	@PutMapping("/api/shareboard")
+	@PutMapping("/users/shareboard")
 	public ResponseEntity<?> updateShareBoard(@RequestPart(value ="shareboarddata", required = false) ShareBoard shareBoard,
 			@RequestPart(value = "files", required = false) MultipartFile[] files) {
 		log.info("update shareBoard");
 		return ResponseEntity.ok(shareService.updateShareBoard(shareBoard, files));
 	}
 	
-	@DeleteMapping("/api/shareboard/{shareboardid}")
+	@DeleteMapping("/users/shareboard/{shareboardid}")
 	public ResponseEntity<?> deleteShareBoard(@PathVariable int shareboardid) {
 		log.info("delete shareBoard");
 		return ResponseEntity.ok(shareService.deleteShareBoard(shareboardid));

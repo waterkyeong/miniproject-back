@@ -66,6 +66,7 @@ public class FreeBoardService {
 	
 
 	public FreeBoardDTO getFreeBoard(int freeboardid) {
+		
 		countView(freeboardid);
 
 		FreeBoard findfb = freebRepo.findById(freeboardid).get();
@@ -119,6 +120,7 @@ public class FreeBoardService {
 	}
 
 	public FreeBoard insertFreeBoard(FreeBoard freeBoard, MultipartFile[] files) throws IllegalStateException, IOException {
+		
 		if(freeBoard == null) {
 			throw new IllegalArgumentException("freeBoard cannot be null");
 		}

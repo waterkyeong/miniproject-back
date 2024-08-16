@@ -19,5 +19,5 @@ public class ShareBoardDTO {
 	private Date createDate;
 	private String username;
 	private List<String> simges = new ArrayList<>();
-
+	private List<ShareCommentDTO> scomts = new ArrayList<>();
 }

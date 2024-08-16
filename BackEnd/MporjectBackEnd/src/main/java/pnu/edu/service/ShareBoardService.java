@@ -9,9 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import pnu.edu.domain.ShareBoard;
 import pnu.edu.domain.ShareBoardImgs;
+import pnu.edu.domain.ShareComment;
 import pnu.edu.domain.dto.ShareBoardDTO;
+import pnu.edu.domain.dto.ShareCommentDTO;
 import pnu.edu.repository.ShareBoardImgsRepository;
 import pnu.edu.repository.ShareBoardRepository;
+import pnu.edu.repository.ShareCommentRepository;
 import pnu.edu.util.Fileutil;
 
 @Service
@@ -20,6 +23,7 @@ public class ShareBoardService {
 
 	private final ShareBoardRepository shareRepo;
 	private final ShareBoardImgsRepository shardImgRepo;
+	private final ShareCommentRepository shareComRepo;
 	
 //	public List<ShareBoardDTO> getShareBoard(int page, int size) {
 //		
@@ -75,10 +79,17 @@ public class ShareBoardService {
 		sbi.setAdress(finds.getAdress());
 		sbi.setUsername(finds.getMember().getUsername());
 		sbi.setView(finds.getView());
-		for(ShareBoardImgs sit : finds.getSimges()) {
-			sbi.getSimges().add(sit.getSimgname());
-		}
 		sbi.setCreateDate(finds.getCreateDate());
+		if(finds.getSimges() != null) {
+			for(ShareBoardImgs sit : finds.getSimges()) {
+				if(sit.getSimgoriname() != null) {
+					sbi.getSimges().add(sit.getSimgoriname());
+				}
+			}
+		}
+		
+		List<ShareComment> rootCom = shareComRepo.findByShareBoard_ShareBoardIdAndParentIsNull(shareboardid);
+		sbi.setScomts(loadShareComts(rootCom));
 		
 		return sbi;
 	}
@@ -87,6 +98,24 @@ public class ShareBoardService {
 		ShareBoard finds = shareRepo.findById(shareboardid).get();
 		finds.setView(finds.getView()+1);
 		return shareRepo.save(finds);
+	}
+	
+	public List<ShareCommentDTO> loadShareComts(List<ShareComment> sharecomts) {
+		List<ShareCommentDTO> scDTO = new ArrayList<>();
+		for(ShareComment sc : sharecomts) {
+			ShareCommentDTO scd = new ShareCommentDTO();
+			scd.setShareCommentId(sc.getShareCommentId());
+			scd.setContent(sc.getContent());
+			scd.setCreateDate(sc.getCreateDate());
+			scd.setParentId(sc.getParent() != null ? sc.getParent().getShareCommentId() : null);
+			scd.setShareBoardid(sc.getShareBoard().getShareBoardId());
+			scd.setUsername(sc.getMember() != null ? sc.getMember().getUsername() : "없는 회원입니다.");
+			List<ShareCommentDTO> childDTOs = loadShareComts(sc.getScchildlist());
+			scd.setScchildlist(childDTOs);
+			scd.setDeleted(sc.isDeleted());
+			scDTO.add(scd);
+		}
+		return scDTO;
 	}
 	
 	public ShareBoard insertShareBoard(ShareBoard shareBoard, MultipartFile[] files) {
