@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -45,14 +47,17 @@ public class ShareComment {
 	@Column(nullable = false)
 	private boolean deleted = false;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parentId")
 	private ShareComment parent;
 	
+	@JsonIgnore
 	@Builder.Default
 	@OneToMany(mappedBy = "parent", orphanRemoval = false)
 	private List<ShareComment> scchildlist = new ArrayList<>();
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "shareBoardId")
 	ShareBoard shareBoard;

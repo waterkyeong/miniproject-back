@@ -55,7 +55,6 @@ public class ShareBoardService {
 			sdto.setShareBoardId(sb.getShareBoardId());
 			sdto.setType(sb.getType());
 			sdto.setTitle(sb.getTitle());
-			sdto.setContent(sb.getContent());
 			sdto.setUsername(sb.getMember().getUsername());
 			sdto.setView(sb.getView());
 			sdto.setCreateDate(sb.getCreateDate());
@@ -76,14 +75,14 @@ public class ShareBoardService {
 		sbi.setType(finds.getType());
 		sbi.setTitle(finds.getTitle());
 		sbi.setContent(finds.getContent());
-		sbi.setAdress(finds.getAdress());
+		sbi.setAddress(finds.getAddress());
 		sbi.setUsername(finds.getMember().getUsername());
 		sbi.setView(finds.getView());
 		sbi.setCreateDate(finds.getCreateDate());
 		if(finds.getSimges() != null) {
 			for(ShareBoardImgs sit : finds.getSimges()) {
-				if(sit.getSimgoriname() != null) {
-					sbi.getSimges().add(sit.getSimgoriname());
+				if(sit.getSimgname() != null) {
+					sbi.getSimges().add(sit.getSimgname());
 				}
 			}
 		}
@@ -124,11 +123,10 @@ public class ShareBoardService {
 			throw new IllegalArgumentException("ShareBoard cannot be null");
 		}
 		ShareBoard shareBoard1 = ShareBoard.builder()
-				.shareBoardId(shareBoard.getShareBoardId())
 				.type(shareBoard.getType())
 				.title(shareBoard.getTitle())
 				.content(shareBoard.getContent())
-				.adress(shareBoard.getAdress())
+				.address(shareBoard.getAddress())
 				.member(shareBoard.getMember()).build();
 		ShareBoard shareBoard2 = shareRepo.save(shareBoard1);
 		
@@ -153,8 +151,8 @@ public class ShareBoardService {
 		finds.setType(shareBoard.getType());
 		finds.setTitle(shareBoard.getTitle());
 		finds.setContent(shareBoard.getContent());
-		finds.setAdress(shareBoard.getAdress());
-		finds.setCreateDate(shareBoard.getCreateDate());
+		finds.setAddress(shareBoard.getAddress());
+		finds.setModifyDate(shareBoard.getCreateDate());
 		ShareBoard finds1 = shareRepo.save(finds);
 		
 		if(files != null && files.length >0) {

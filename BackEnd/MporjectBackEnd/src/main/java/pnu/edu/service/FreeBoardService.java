@@ -82,8 +82,8 @@ public class FreeBoardService {
 		fbi.setCreateDate(findfb.getCreateDate());
 		if (findfb.getFimges() != null) {
 	        for (FreeBoardImgs fit : findfb.getFimges()) {
-	            if (fit.getFimgoriname() != null) {
-	                fbi.getFimges().add(fit.getFimgoriname());
+	            if (fit.getFimgname() != null) {
+	                fbi.getFimges().add(fit.getFimgname());
 	            }
 	        }
 	    }
@@ -157,16 +157,15 @@ public class FreeBoardService {
 		findf.setType(freeBoard.getType());
 		findf.setTitle(freeBoard.getTitle());
 		findf.setContent(freeBoard.getContent());
-		findf.setCreateDate(freeBoard.getCreateDate());
+		findf.setModifyDate(freeBoard.getCreateDate());
 		FreeBoard findf1 =  freebRepo.save(findf);
 
-		if(files != null && files.length > 0) {
-			if( findf.getFimges() != null) {
-				// 기존 저장된 파일 삭제
-				for(FreeBoardImgs i : findf.getFimges()) {
-					freebImgRepo.deleteById(i.getFimgid());
-				}
+		if(findf.getFimges() != null && files == null) {
+			for(FreeBoardImgs i : findf.getFimges()) {
+				freebImgRepo.deleteById(i.getFimgid());
 			}
+		}
+		if(files != null && files.length > 0) {
 			//새로운 파일저장
 			String [] newFilename = Fileutil.uploadImg(files);
 
@@ -178,7 +177,16 @@ public class FreeBoardService {
 						.freeboard(findf1)
 						.build();
 				freebImgRepo.save(img);
-			}
+				findf1.getFimges().add(img);
+//				if( findf.getFimges() != null) {
+//					// 기존 저장된 파일 삭제
+//					for(FreeBoardImgs i : findf.getFimges()) {
+//						freebImgRepo.deleteById(i.getFimgid());
+//					}}
+					
+					
+				}
+			
 		}
 		return findf1;
 	}

@@ -1,6 +1,8 @@
 package pnu.edu.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +27,12 @@ public class FreeCommentController {
 	
 	
 	@PostMapping("/users/freeboard/{freeboardid}/freecomment")
-	public ResponseEntity<?> insertFreeComment(@PathVariable int freeboardid, /*@RequestParam String username,*/ @RequestBody FreeCommentDTO freeCommentDTO ) {
+	public ResponseEntity<?> insertFreeComment(@PathVariable int freeboardid,
+			@RequestBody FreeCommentDTO freeCommentDTO,
+			@AuthenticationPrincipal User principal) {
+		
 		log.info("insert FreeComment");
-		return ResponseEntity.ok(fcServcie.insertFreeComment(freeboardid,/* username,*/ freeCommentDTO));
+		return ResponseEntity.ok(fcServcie.insertFreeComment(freeboardid, principal.getUsername() , freeCommentDTO));
 	}
 	
 	@PutMapping("/users/freeboard/freecomment/{freecommentid}")

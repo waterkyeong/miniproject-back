@@ -1,5 +1,7 @@
 package pnu.edu.controller;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +25,9 @@ public class MemberController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> signin(@RequestBody Member member) {
 		log.info("signin");
+		if(memService.checkid(member.getUsername()).isPresent()) {
+			return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Duplicate"));
+		}
 		return ResponseEntity.ok(memService.signin(member));
 	}
 }

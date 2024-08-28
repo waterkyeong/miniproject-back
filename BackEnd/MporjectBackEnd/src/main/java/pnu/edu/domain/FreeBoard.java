@@ -39,7 +39,7 @@ public class FreeBoard {
 	private String privateType;
 	@Column(length=5)
 	private String type;
-	@Column(length=20, nullable = false)
+	@Column(length=50, nullable = false)
 	private String title;
 	@Column(length=5000, nullable = false)
 	private String content;
@@ -50,6 +50,10 @@ public class FreeBoard {
 	@Builder.Default
 	@Column(columnDefinition = "timestamp default current_timestamp")
 	private Date createDate = new Date();
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "timestamp default current_timestamp")
+	private Date modifyDate;
 	
 	@Builder.Default
 	@OneToMany(mappedBy = "freeboard", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

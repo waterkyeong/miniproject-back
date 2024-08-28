@@ -1,5 +1,7 @@
 package pnu.edu.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +32,7 @@ public class ShareBoardImgs {
 	@Column(length = 100, nullable = false)
 	private String simgoriname;
 	
+	@JsonIgnore
 	@ManyToOne(optional = true)	@JoinColumn(name = "share_board_id") 
 	private ShareBoard shareboard;
 }

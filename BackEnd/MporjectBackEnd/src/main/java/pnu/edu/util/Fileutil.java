@@ -4,22 +4,21 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Fileutil {
 	
 	
-	@Value("${spring.servlet.multipart.location}")
-	private static String location;
+//	@Value("${spring.servlet.multipart.location}")
+	private static String location = "C:/Mproject/BackEnd/MporjectBackEnd/src/main/resources/static/photos";
 	
 	public static String[] uploadImg(MultipartFile[] files) {
 		String [] fnames = new String[files.length];
 		if(files != null && 0<files.length) {
 			try {
 				for(int i = 0 ; i < files.length ; i++) {
-					System.out.println("file:"+location+files[i].getOriginalFilename());
-					files[i].transferTo(new File(location+files[i].getOriginalFilename()));
+					System.out.println("file:"+location+File.separator+files[i].getOriginalFilename());
+					files[i].transferTo(new File(location+File.separator+files[i].getOriginalFilename()));
 					
 					//rename
 					fnames[i] = renameFile(location, files[i].getOriginalFilename());

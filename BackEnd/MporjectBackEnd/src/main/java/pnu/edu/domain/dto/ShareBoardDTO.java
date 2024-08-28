@@ -14,9 +14,10 @@ public class ShareBoardDTO {
 	private String type;
 	private String title;
 	private String content;
-	private String adress;
+	private String address;
 	private int view;
 	private Date createDate;
+	private Date modifyDate;
 	private String username;
 	private List<String> simges = new ArrayList<>();
 	private List<ShareCommentDTO> scomts = new ArrayList<>();

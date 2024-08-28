@@ -1,5 +1,7 @@
 package pnu.edu.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +19,7 @@ public class MemberService {
 	private PasswordEncoder encoder = new BCryptPasswordEncoder();
 	
 	public Member signin(Member member) {
-		
+			
 		Member newMem =  Member.builder()
 				.username(member.getUsername())
 				.password(encoder.encode(member.getPassword()))
@@ -29,4 +31,8 @@ public class MemberService {
 		return memRepo.save(newMem);
 	}
 	
+	public Optional<Member> checkid(String username) {
+		
+		return memRepo.findById(username);
+	}
 }

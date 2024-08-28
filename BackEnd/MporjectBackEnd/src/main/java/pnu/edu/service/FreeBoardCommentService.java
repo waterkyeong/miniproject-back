@@ -1,7 +1,6 @@
 package pnu.edu.service;
 
 import java.util.Date;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,19 +25,19 @@ public class FreeBoardCommentService {
 	private final MemberRepository memRepo;
 	private static final Logger logger = LoggerFactory.getLogger(FreeBoardCommentService.class);
 
-	public FreeComment insertFreeComment(int freeBoardId, /*String username,*/ FreeCommentDTO freeCommentDTO) {
+	public FreeComment insertFreeComment(int freeBoardId, String username, FreeCommentDTO freeCommentDTO) {
 		
 		FreeBoard findfb = fbRepo.findById(freeBoardId).get();
-//		Member finduser = memRepo.findById(username).get();
+		Member finduser = memRepo.findById(username).get();
 		
 		freeCommentDTO.setFreeBoardId(findfb.getFreeBoardId());
-//		freeCommentDTO.setMember(finduser.getUsername());
+		freeCommentDTO.setUsername(finduser.getUsername());
 		
 		FreeComment newfc = FreeComment.builder()
 				.content(freeCommentDTO.getContent())
 				.createDate(new Date())
 				.freeBoard(findfb)
-//				.member(freeCommentDTO.getUsername())
+				.member(finduser)
 				.build();
 		
 		if(freeCommentDTO.getParentId() != null && freeCommentDTO.getParentId()>0) {

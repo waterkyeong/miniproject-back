@@ -37,12 +37,12 @@ public class ShareBoard {
 	private int shareBoardId;
 	@Column(length = 5, nullable = false)
 	private String type;
-	@Column(length = 20, nullable = false)
+	@Column(length = 50, nullable = false)
 	private String title;
 	@Column(length = 5000, nullable = false)
 	private String content;
 	@Column(length = 30)
-	private String adress;
+	private String address;
 	@Builder.Default
 	@Column(columnDefinition = "int default 0")
 	private int view = 0;
@@ -51,12 +51,20 @@ public class ShareBoard {
 	@Column(columnDefinition = "timestamp default current_timestamp")
 	private Date createDate = new Date();
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "timestamp default current_timestamp")
+	private Date modifyDate;
+	
 	@Builder.Default
 	@OneToMany(mappedBy = "shareboard", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@OrderBy("id asc")
 	private List<ShareBoardImgs> simges = new ArrayList<>();
 	
+	@Builder.Default
+	@OneToMany(mappedBy = "shareBoard",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<ShareComment> scomes = new ArrayList<>();
+	
 	@ManyToOne
 	@JoinColumn(name = "username")
-	private Member member;
+	Member member;
 }

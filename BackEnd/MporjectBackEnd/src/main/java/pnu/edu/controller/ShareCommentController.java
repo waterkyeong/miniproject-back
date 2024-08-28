@@ -1,13 +1,14 @@
 package pnu.edu.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,9 @@ public class ShareCommentController {
 	private final ShareBoardCommentService scService;
 	
 	@PostMapping("/users/shareboard/{shareboardid}/sharecomment")
-	public ResponseEntity<?> insertShareComment(@PathVariable int shareboardid, @RequestParam String username, @RequestBody ShareCommentDTO shareCommentDTO) {
+	public ResponseEntity<?> insertShareComment(@PathVariable int shareboardid, @AuthenticationPrincipal User principal, @RequestBody ShareCommentDTO shareCommentDTO) {
 		log.info("insert ShareComment");
-		return ResponseEntity.ok(scService.insertFreeComment(shareboardid, username, shareCommentDTO));
+		return ResponseEntity.ok(scService.insertFreeComment(shareboardid, principal.getUsername(), shareCommentDTO));
 	}
 	
 	@PutMapping("/users/shareboard/sharecomment/{sharecommentid}")
